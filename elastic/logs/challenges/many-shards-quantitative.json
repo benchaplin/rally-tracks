@@ -95,6 +95,9 @@
       "tags": ["esql", "limit50"]
     }
     {%- endif %}
+    {%- if p_initial_indices_count > 0 %},
+    {% include "tasks/many-shards-search.json" %}
+    {%- endif %}
 
   ]
 }

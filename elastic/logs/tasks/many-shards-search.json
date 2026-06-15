@@ -1,0 +1,22 @@
+{
+  "name": "many-shards-search",
+  "operation": {
+    "name": "many-shards-search",
+    "operation-type": "search",
+    "index": "auditbeat*",
+    "request-params": {
+      "request_cache": "false"
+    },
+    "body": {
+      "query": {
+        "match_all": {}
+      },
+      "size": 0,
+      "track_total_hits": false
+    }
+  },
+  "warmup-iterations": {{ p_batched_search_warmup }},
+  "iterations": {{ p_batched_search_iterations }},
+  "clients": {{ p_batched_search_clients }},
+  "tags": ["search", "batched-query-phase"]
+}
