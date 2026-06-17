@@ -14,6 +14,7 @@
 {% set p_batched_search_iterations = (batched_search_iterations | default(200)) %}
 {% set p_batched_search_warmup = (batched_search_warmup | default(50)) %}
 {% set p_batched_search_clients = (batched_search_clients | default(2)) %}
+{% set p_topn_search_iterations = (topn_search_iterations | default(20)) %}
 {% set p_initial_frozen_indices_count = (initial_frozen_indices_count | default(0)) %}
 {% set p_bulk_size = bulk_size | default(1000) %}
 {% set p_runtime_bulk_size = (runtime_bulk_size | default(p_bulk_size)) %}

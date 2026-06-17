@@ -96,7 +96,8 @@
     }
     {%- endif %}
     {%- if p_initial_indices_count > 0 %},
-    {% include "tasks/many-shards-search.json" %}
+    {% include "tasks/many-shards-search.json" %},
+    {% include "tasks/many-shards-search-topn.json" %}
     {%- endif %}
 
   ]
