@@ -512,4 +512,25 @@
       "name": "esql-avg-message-keyword-length",
       "operation-type": "esql",
       "query": "FROM logs-* | STATS AVG(LENGTH(message.keyword))"
+    },
+    {
+      "name": "clientip-terms-agg",
+      "operation-type": "search",
+      "index": "logs-*",
+      "request-params": {
+        "request_cache": "false"
+      },
+      "body": {
+        "size": 0,
+        "track_total_hits": false,
+        "aggs": {
+          "by_clientip": {
+            "terms": {
+              "field": "clientip",
+              "size": 1000,
+              "shard_size": {{ terms_shard_size | default(50000) }}
+            }
+          }
+        }
+      }
     }

@@ -1,0 +1,49 @@
+    {
+      "name": "batched-query-phase",
+      "description": "Index http_logs then run a high-cardinality terms agg on clientip to measure coordinator heap pressure from partial reductions.",
+      "schedule": [
+        {
+          "tags": ["setup"],
+          "operation": "delete-index"
+        },
+        {
+          "tags": ["setup"],
+          "operation": {
+            "operation-type": "create-index",
+            "settings": {{index_settings | default({}) | tojson}}
+          }
+        },
+        {
+          "name": "check-cluster-health",
+          "tags": ["health"],
+          "operation": {
+            "operation-type": "cluster-health",
+            "index": "logs-*",
+            "request-params": {
+              "wait_for_status": "{{cluster_health | default('green')}}",
+              "wait_for_no_relocating_shards": "true"
+            },
+            "retry-until-success": true
+          }
+        },
+        {
+          "tags": ["index"],
+          "operation": "index-append",
+          "warmup-time-period": 240,
+          "clients": {{bulk_indexing_clients | default(8)}},
+          "ignore-response-error-level": "{{error_level | default('non-fatal')}}"
+        },
+        {
+          "name": "refresh-after-index",
+          "tags": ["index"],
+          "operation": "refresh"
+        },
+        {
+          "name": "clientip-terms-agg",
+          "tags": ["search", "batched-query-phase"],
+          "operation": "clientip-terms-agg",
+          "clients": 1,
+          "iterations": {{ terms_iterations | default(20) }}
+        }
+      ]
+    }
